@@ -6,6 +6,7 @@ require(dplyr)
 require(NOISeq)
 library(DESeq2)
 library(biomaRt)
+library(EDASeq)
 
 #### Prepare functions ####
 
@@ -41,6 +42,16 @@ get_annot <- function(x,y) {
   print(head(rownames(x)))
   print(head(annot1$Ensembl_ID_Version))
   return(list(x,annot1))
+}
+
+norm <- function(x, y, z) {
+  ln.data <- withinLaneNormalization(x, y$Length, which = "full")
+  gcn.data <- withinLaneNormalization(ln.data , y$GC, which = "full")
+  norm.counts <- tmm(gcn.data, long = 1000, lc = 0, k = 0)
+  noiseqData <- NOISeq::readData(norm.counts, factors = as.data.frame(z$Group))
+  mydata2corr1 = NOISeq::ARSyNseq(noiseqData, norm = "n",  logtransf = FALSE)
+  rnas2 <- exprs(mydata2corr1)
+  return(rnas2)
 }
 
 #### Get annotation file ####
