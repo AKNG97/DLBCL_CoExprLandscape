@@ -7,7 +7,9 @@ library(ggsurvfit)
 #Load annot file from TCGA to get gene names
 annot <- readRDS("row_data.RDS")
 
-#Load normalized expression data from the 88 genes with constant log2 fold change
+#Load normalized expression data from the set of genes of interest, in this case we 
+# analyzed 88 genes with a constant log2 fold change across the sequential order of the COO classification
+
 ProgressExpressGenes <- readRDS("88ConstantlyChangingGenes.RDS")
 ProgressExpressGenes <- as.data.frame(ProgressExpressGenes)
 
