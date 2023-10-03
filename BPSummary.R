@@ -1,3 +1,6 @@
+#Note: The inputs for this scripts are the community list of the ABC network, the DEG outputs between ABC vs GCB and Unclass, and the
+# list of biological processes enriched in the ABC network.
+
 library(dplyr)
 
 communities <-  read.csv("communities_ABC_4.csv", row.names = 1)
