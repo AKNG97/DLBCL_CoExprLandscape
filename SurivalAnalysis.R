@@ -1,3 +1,6 @@
+#NOTES: The files row_data.RDS and clinical_info.RDS can be obtained through the DataProcessing.R scripts. The 88ConstantlyChangingGenes.RDS file 
+# file can be substitued by any expression matrix of interest.
+
 #Load required data
 
 library(dplyr)
