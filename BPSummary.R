@@ -3,9 +3,12 @@ library(dplyr)
 communities <-  read.csv("communities_ABC_4.csv", row.names = 1)
 communities[communities == "" | communities == " "] <- NA
 
+resLFC_GCBvsABC <- read.delim("resLFC_Group_GCB_vs_ABC.tsv")
+resLFC_UnclassvsABC <- read.delim("resLFC_Group_Unclass_vs_ABC.tsv")
+
 resLFC_ABCvsGCB <- resLFC_GCBvsABC %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
-resLFC_ABCvsUnclass <- resLFC_UnclassvsGCB %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
-resLFC_Group_Unclass_vs_ABC.tsv
+resLFC_ABCvsUnclass <- resLFC_UnclassvsABC %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
+
 for(i in 1:nrow(communities)) {
   
   query_GCB <- resLFC_ABCvsGCB[rownames(resLFC_ABCvsGCB) %in% communities[i,], ]
