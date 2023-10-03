@@ -3,6 +3,7 @@ library(GOSemSim)
 library(DOSE)
 library(dplyr)
 
+#Substitute the communities_ABC_4.csv file with any other community file 
 communities <- read.csv("communities_ABC_4.csv", row.names = 1)
 communities_t <- t(communities)
 communities_t <- gsub("\\.[0-9]*", "", communities_t)
