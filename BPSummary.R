@@ -1,3 +1,4 @@
+library(dplyr)
 
 communities <-  read.csv("communities_ABC_4.csv", row.names = 1)
 communities[communities == "" | communities == " "] <- NA
