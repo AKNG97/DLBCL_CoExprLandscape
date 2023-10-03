@@ -142,6 +142,21 @@ summary(res)
 resLFC <- lfcShrink(dds, coef="Group_Unclass_vs_GCB", type="apeglm")
 write.table(resLFC, file = "resLFC_Group_Unclass_vs_GCB.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
 
+#Unclass vs ABC
+dds <- DESeqDataSetFromMatrix(countData = round(lymph_raw[,factors_Lymph$Group=="ABC" | 
+                                                            factors_Lymph$Group=="Unclass"]),
+                              colData = factors_Lymph[factors_Lymph$Group=="ABC" | 
+                                                        factors_Lymph$Group=="Unclass",],
+                              design = ~ Group)
+
+
+dds <- DESeq(dds)
+res <-  results(dds)
+res
+summary(res)
+resLFC <- lfcShrink(dds, coef="Group_Unclass_vs_ABC", type="apeglm")
+write.table(resLFC, file = "resLFC_Group_Unclass_vs_ABC.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
+
 #### Get norm data ####
 
 Lymph_norm <- norm(Lymph[[1]], Lymph[[2]], Ready_factors_Lymph)
