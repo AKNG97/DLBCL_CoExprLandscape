@@ -94,6 +94,8 @@ CI <- as.data.frame(colData(DLBCL))
 cases_by_subtype <- cases_by_subtype %>% dplyr::select(dbGaP.subject.ID, Gene.Expression.Subgroup)
 CI <- CI %>% inner_join(cases_by_subtype, by = c("submitter_id" = "dbGaP.subject.ID"))
 
+saveRDS(CI, "clinical_info.RDS")
+
 factors_Lymph <- data.frame(Group = CI$Gene.Expression.Subgroup, Sample = CI$sample_submitter_id)
 Ready_factors_Lymph <- as.data.frame(factors_Lymph$Group)
 
