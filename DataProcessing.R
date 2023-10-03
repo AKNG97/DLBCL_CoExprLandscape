@@ -81,6 +81,8 @@ qry.rna_DLBCL <- GDCquery(project = "NCICCR-DLBCL",
 GDCdownload(qry.rna_DLBCL)
 DLBCL <- GDCprepare(qry.rna_DLBCL, summarizedExperiment = TRUE) 
 
+saveRDS(as.data.frame(rowData(DLBCL)), "row_data.RDS")
+
 #### Match clinical information with COO classification ####
 #The classification of samples based on the cell of origin framework was manually obtained from the supplementary material
 #of original publication of the data ("Genetics and Pathogenesis of Diffuse Large B-Cell Lymphoma", DOI: 10.1056/NEJMoa1801445)
