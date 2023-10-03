@@ -5,7 +5,7 @@ communities[communities == "" | communities == " "] <- NA
 
 resLFC_ABCvsGCB <- resLFC_GCBvsABC %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
 resLFC_ABCvsUnclass <- resLFC_UnclassvsGCB %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
-
+resLFC_Group_Unclass_vs_ABC.tsv
 for(i in 1:nrow(communities)) {
   
   query_GCB <- resLFC_ABCvsGCB[rownames(resLFC_ABCvsGCB) %in% communities[i,], ]
