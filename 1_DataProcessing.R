@@ -88,7 +88,7 @@ saveRDS(as.data.frame(rowData(DLBCL)), "Results/row_data.RDS")
 #The classification of samples based on the cell of origin framework was manually obtained from the supplementary material
 #of original publication of the data ("Genetics and Pathogenesis of Diffuse Large B-Cell Lymphoma", DOI: 10.1056/NEJMoa1801445)
 
-cases_by_subtype <- read.csv("cases_by_subtype.csv")
+cases_by_subtype <- read.csv("Inputs/cases_by_subtype.csv")
 cases_by_subtype <- cases_by_subtype[cases_by_subtype$dbGaP.subject.ID %in% DLBCL$submitter_id,]
 
 CI <- as.data.frame(colData(DLBCL))
