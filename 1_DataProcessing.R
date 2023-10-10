@@ -112,6 +112,8 @@ rnas_Lymph <- filter_TCGA(rnas_Lymph)
 ##### Get annot files ####
 
 Lymph <- get_annot(rnas_Lymph, annot)
+Lymph_annot <- Lymph[[2]]
+saveRDS(Lymph_annot, "Results/Lymph_annot.RDS")
 
 ##### DEG analysis using DESeq2 ####
 
