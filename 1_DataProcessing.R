@@ -81,7 +81,8 @@ qry.rna_DLBCL <- GDCquery(project = "NCICCR-DLBCL",
 GDCdownload(qry.rna_DLBCL)
 DLBCL <- GDCprepare(qry.rna_DLBCL, summarizedExperiment = TRUE) 
 
-saveRDS(as.data.frame(rowData(DLBCL)), "row_data.RDS")
+dir.create("Results")
+saveRDS(as.data.frame(rowData(DLBCL)), "Results/row_data.RDS")
 
 #### Match clinical information with COO classification ####
 #The classification of samples based on the cell of origin framework was manually obtained from the supplementary material
@@ -94,7 +95,7 @@ CI <- as.data.frame(colData(DLBCL))
 cases_by_subtype <- cases_by_subtype %>% dplyr::select(dbGaP.subject.ID, Gene.Expression.Subgroup)
 CI <- CI %>% inner_join(cases_by_subtype, by = c("submitter_id" = "dbGaP.subject.ID"))
 
-saveRDS(CI, "clinical_info.RDS")
+saveRDS(CI, "Results/clinical_info.RDS")
 
 factors_Lymph <- data.frame(Group = CI$Gene.Expression.Subgroup, Sample = CI$sample_submitter_id)
 Ready_factors_Lymph <- as.data.frame(factors_Lymph$Group)
@@ -115,7 +116,7 @@ Lymph <- get_annot(rnas_Lymph, annot)
 ##### DEG analysis using DESeq2 ####
 
 lymph_raw <- Lymph[[1]]
-
+dir.create("Results/DEG")
 #GCB vs ABC
 dds <- DESeqDataSetFromMatrix(countData = round(lymph_raw[,factors_Lymph$Group=="GCB" | 
                                                             factors_Lymph$Group=="ABC"]),
@@ -129,7 +130,7 @@ res <-  results(dds)
 res
 summary(res)
 resLFC <- lfcShrink(dds, coef="Group_GCB_vs_ABC", type="apeglm")
-write.table(resLFC, file = "resLFC_Group_GCB_vs_ABC.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
+write.table(resLFC, file = "Results/DEG/resLFC_Group_GCB_vs_ABC.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
 
 #Unclass vs GCB
 dds <- DESeqDataSetFromMatrix(countData = round(lymph_raw[,factors_Lymph$Group=="GCB" | 
@@ -144,7 +145,7 @@ res <-  results(dds)
 res
 summary(res)
 resLFC <- lfcShrink(dds, coef="Group_Unclass_vs_GCB", type="apeglm")
-write.table(resLFC, file = "resLFC_Group_Unclass_vs_GCB.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
+write.table(resLFC, file = "Results/DEG/resLFC_Group_Unclass_vs_GCB.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
 
 #Unclass vs ABC
 dds <- DESeqDataSetFromMatrix(countData = round(lymph_raw[,factors_Lymph$Group=="ABC" | 
@@ -159,25 +160,25 @@ res <-  results(dds)
 res
 summary(res)
 resLFC <- lfcShrink(dds, coef="Group_Unclass_vs_ABC", type="apeglm")
-write.table(resLFC, file = "resLFC_Group_Unclass_vs_ABC.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
+write.table(resLFC, file = "Results/DEG/resLFC_Group_Unclass_vs_ABC.tsv", row.names = TRUE, col.names = NA, sep = "\t", quote = FALSE)
 
 #### Get norm data ####
 
 Lymph_norm <- norm(Lymph[[1]], Lymph[[2]], Ready_factors_Lymph)
 
 #### Get norm count matrices ####
-
+dir.create("Results/NormalizedData")
 ABC_DLBCL_Norm <- Lymph_norm[, factors_Lymph$Group=="ABC"]
 ABC_DLBCL_Norm <- ABC_DLBCL_Norm %>% dplyr::mutate(Gene = rownames(ABC_DLBCL_Norm)) %>% dplyr::relocate(Gene)
-write.table(ABC_DLBCL_Norm, file = "rnas_norm_ABC_DLBC.tsv", row.names = FALSE, sep = "\t", quote = FALSE, col.names = FALSE)
+write.table(ABC_DLBCL_Norm, file = "Results/NormalizedData/rnas_norm_ABC_DLBC.tsv", row.names = FALSE, sep = "\t", quote = FALSE, col.names = FALSE)
 
 GCB_DLBCL_Norm <- Lymph_norm[, factors_Lymph$Group=="GCB"]
 GCB_DLBCL_Norm <- GCB_DLBCL_Norm %>% dplyr::mutate(Gene = rownames(ABC_DLBCL_Norm)) %>% dplyr::relocate(Gene)
-write.table(GCB_DLBCL_Norm, file = "rnas_norm_GCB_DLBCL.tsv", row.names = FALSE, sep = "\t", quote = FALSE, col.names = FALSE)
+write.table(GCB_DLBCL_Norm, file = "Results/NormalizedData/rnas_norm_GCB_DLBCL.tsv", row.names = FALSE, sep = "\t", quote = FALSE, col.names = FALSE)
 
 Unclass_DLBCL_Norm <- Lymph_norm[, factors_Lymph$Group=="Unclass"]
 Unclass_DLBCL_Norm <- Unclass_DLBCL_Norm %>% dplyr::mutate(Gene = rownames(ABC_DLBCL_Norm)) %>% dplyr::relocate(Gene)
-write.table(Unclass_DLBCL_Norm, file = "rnas_norm_Unclass_DLBCL.tsv", row.names = FALSE, sep = "\t", quote = FALSE, col.names = FALSE)
+write.table(Unclass_DLBCL_Norm, file = "Results/NormalizedData/rnas_norm_Unclass_DLBCL.tsv", row.names = FALSE, sep = "\t", quote = FALSE, col.names = FALSE)
 
 
 
