@@ -165,6 +165,7 @@ write.table(resLFC, file = "Results/DEG/resLFC_Group_Unclass_vs_ABC.tsv", row.na
 #### Get norm data ####
 
 Lymph_norm <- norm(Lymph[[1]], Lymph[[2]], Ready_factors_Lymph)
+saveRDS(Lymph_norm, "Results/Norm_data.RDS")
 
 #### Get norm count matrices ####
 dir.create("Results/NormalizedData")
