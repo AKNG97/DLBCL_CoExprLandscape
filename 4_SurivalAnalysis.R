@@ -8,7 +8,7 @@ library(survival)
 library(ggsurvfit)
 
 #Load annot file from TCGA to get gene names
-annot <- readRDS("row_data.RDS")
+annot <- readRDS("Results/row_data.RDS")
 
 #Load normalized expression data from the set of genes of interest, in this case we 
 # analyzed 88 genes with a constant log2 fold change across the sequential order of the COO classification
@@ -49,7 +49,7 @@ for(i in 1:nrow(ProgressExpressGenes)){
 write.csv(factors_global, "SurvivalAnalysis_results/GroupsByMedianExpression.csv", quote = FALSE)
 
 #Get survival data from cliinical information
-clinical_data <- readRDS("clinical_info.RDS")
+clinical_data <- readRDS("Results/clinical_info.RDS")
 clinical_data[is.na(clinical_data$days_to_last_follow_up), ]$days_to_last_follow_up <- 0
 
 factors_global <- factors_global %>% inner_join(clinical_data[,c("sample_submitter_id", "days_to_last_follow_up", "vital_status")], 
