@@ -13,13 +13,27 @@ annot <- readRDS("Results/row_data.RDS")
 #Load normalized expression data from the set of genes of interest, in this case we 
 # analyzed 88 genes with a constant log2 fold change across the sequential order of the COO classification
 
-ProgressExpressGenes <- readRDS("88ConstantlyChangingGenes.RDS")
+Norm_data <- readRDS("Results/Norm_data.RDS")
+UnclassvsGCB <- read.delim("Results/DEG/resLFC_Group_Unclass_vs_GCB.tsv")
+UnclassvsABC <- read.delim("Results/DEG/resLFC_Group_Unclass_vs_ABC.tsv")
+
+up_genes <- unique(intersect(resLFC_UnclassvsGCB[resLFC_UnclassvsGCB$log2FoldChange > 1 & resLFC_UnclassvsGCB$padj < 0.05,]$X,
+            resLFC_UnclassvsABC[resLFC_UnclassvsABC$log2FoldChange < -1 & resLFC_UnclassvsABC$padj < 0.05,]$X))
+
+down_genes <- unique(intersect(resLFC_UnclassvsGCB[resLFC_UnclassvsGCB$log2FoldChange < -1 & resLFC_UnclassvsGCB$padj < 0.05,]$X,
+                             resLFC_UnclassvsABC[resLFC_UnclassvsABC$log2FoldChange > 1 & resLFC_UnclassvsABC$padj < 0.05,]$X))
+genes <- c(up_genes, down_genes)
+
+ProgressExpressGenes <- Norm_data[rownames(Norm_data) %in% genes, ]
+
+saveRDS(Norm_data,"Results/DEG/ConstantlyChangingGenes.RDS")
+
 ProgressExpressGenes <- as.data.frame(ProgressExpressGenes)
 
 #Get gene names
 rownames(ProgressExpressGenes) <- annot$gene_name[match(rownames(ProgressExpressGenes), annot$gene_id)]
 
-dir.create("SurvivalAnalysis_results")
+dir.create("Results/SurvivalAnalysis_results")
 
 #Classify samples as High or Low according with the median of each gene
 for(i in 1:nrow(ProgressExpressGenes)){
@@ -46,7 +60,7 @@ for(i in 1:nrow(ProgressExpressGenes)){
   }
   } 
 
-write.csv(factors_global, "SurvivalAnalysis_results/GroupsByMedianExpression.csv", quote = FALSE)
+write.csv(factors_global, "Results/SurvivalAnalysis_results/GroupsByMedianExpression.csv", quote = FALSE)
 
 #Get survival data from cliinical information
 clinical_data <- readRDS("Results/clinical_info.RDS")
@@ -60,8 +74,7 @@ factors_global <- factors_global %>% relocate(c("Sample", "days_to_last_follow_u
 factors_global <- as.data.frame(factors_global)
 
 #Perform surival analysis
-dir.create("SurvivalAnalysis_results")
-
+dir.create("Results/SurvivalAnalysis_results/Plots")
 for(i in 4:ncol(factors_global)) {
   
   gene.name <- colnames(factors_global)[i]
@@ -81,7 +94,7 @@ for(i in 4:ncol(factors_global)) {
     ) +
     add_risktable()
   
-  ggsave(paste0("SurvivalAnalysis_results/KM_", gene.name, ".png"), surv.plot, height = 10, width = 10, dpi = 300)
+  ggsave(paste0("SurvivalAnalysis_results/Plots/KM_", gene.name, ".png"), surv.plot, height = 10, width = 10, dpi = 300)
   
   suvdiff <- survdiff(Surv(days_to_last_follow_up, vital_status) ~ Gene, data = surv.matrix)
   
