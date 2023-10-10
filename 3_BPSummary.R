@@ -55,7 +55,7 @@ for(i in 1:nrow(communities)) {
 Comm_DE_ABCvsGCB <- x
 Comm_DE_ABCvsUnclass <- y
 
-ABC_enriched <- read.delim("ABC_Communities_Enriched_4.sif", header = F)
+ABC_enriched <- read.delim("Results/Enrichments/ABC_Communities_Enriched.sif", header = F)
 colnames(ABC_enriched) <- c("Community", "Interaction", "GO_BP", "ID", "GeneRatio",  
                 "BgRatio", "pvalue", "p.adjust", "qvalue", "geneID", "Count")
 
@@ -77,7 +77,7 @@ ABC_HT <- ComplexHeatmap::Heatmap(HT, row_km = 6, row_km_repeats = 100,border = 
                                          c("blue", "white", "red")))
 
 draw(ABC_HT)
-png("ABC_BP_DEG.png", units="in", width=10, height=10, res=300)
+png("Results/ABC_BP_DEG.png", units="in", width=10, height=10, res=300)
 draw(ABC_HT, heatmap_legend_side = "left")
 dev.off()
 
