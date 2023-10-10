@@ -1,17 +1,12 @@
-library(SummarizedExperiment)
-library(TCGAbiolinks)
-require(EDASeq)
-require(dplyr)
-require(NOISeq)
-library(DESeq2)
-library(biomaRt)
+
+library(dplyr)
 library(ggplot2)
 
 ######## Load Networks
 
-ABC <- read.delim("ABC_10M_4.sif")
-GCB <- read.delim("GCB_10M_4.sif")
-Unclass <- read.delim("Unclass_10M_4.sif")
+ABC <- read.delim("ABC_10M.sif")
+GCB <- read.delim("GCB_10M.sif")
+Unclass <- read.delim("Unclass_10M.sif")
 
 ######## Add Chromosomes
 
@@ -26,8 +21,7 @@ Add_Chromosomes_Types <- function(x,y) {
   return(x)
 }
 
-Lymph <- readRDS("/home/anakamura/B_Malign/Pre_Pro/Lymph_bf_4.RDS")
-Lymph_annot <- Lymph[[2]]
+Lymph_annot <- readRDS("Results/Lymph_annot.RDS")
 
 ABC <- Add_Chromosomes_Types(ABC, Lymph_annot)
 dim(ABC)
