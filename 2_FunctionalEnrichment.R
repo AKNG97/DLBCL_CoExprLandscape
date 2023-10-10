@@ -3,9 +3,12 @@ library(GOSemSim)
 library(DOSE)
 library(dplyr)
 
-#Substitute the communities_ABC_4.csv file with any other community file 
-communities <- read.csv("communities_ABC_4.csv", row.names = 1)
-communities_t <- t(communities)
+Subtypes <- c("ABC", "GCB", "Unclass")
+
+for(i in 1:length(Subtypes){
+  communities <- read.csv(paste0("Inputs/Communities/communities_", Subtypes[i], ".csv"), row.names = 1)
+
+  communities_t <- t(communities)
 communities_t <- gsub("\\.[0-9]*", "", communities_t)
 
 
@@ -20,7 +23,6 @@ for(i in 1:ncol(communities_t)) {
 
     if(!is.na(FuncEnrich[1]$ID)) {
       simpl_FuncEnrich <- simplify(FuncEnrich, cutoff=0.7, by="p.adjust", select_fun=min) %>% as.data.frame()
-
 
       network <- data.frame(Community = rep(colnames(communities_t)[i], each=nrow(simpl_FuncEnrich)),
                             Interaction = rep(1, each=nrow(simpl_FuncEnrich)),
@@ -45,5 +47,8 @@ for(i in 1:ncol(communities_t)) {
     }
 
   }}
+write.table(x, file = paste0("Results/Enrichments/",Subtypes[i], "_Communities_Enriched.sif") , 
+            row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)      
+}
 
-write.table(x, file = "ABC_Communities_Enriched_4.sif", row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)
+      
