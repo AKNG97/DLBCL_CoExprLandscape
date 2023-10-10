@@ -3,11 +3,11 @@
 
 library(dplyr)
 
-communities <-  read.csv("communities_ABC_4.csv", row.names = 1)
+communities <-  read.csv("Input/Communities/communities_ABC.csv", row.names = 1)
 communities[communities == "" | communities == " "] <- NA
 
-resLFC_GCBvsABC <- read.delim("resLFC_Group_GCB_vs_ABC.tsv")
-resLFC_UnclassvsABC <- read.delim("resLFC_Group_Unclass_vs_ABC.tsv")
+resLFC_GCBvsABC <- read.delim("Results/DEG/resLFC_Group_GCB_vs_ABC.tsv")
+resLFC_UnclassvsABC <- read.delim("Results/DEG/resLFC_Group_Unclass_vs_ABC.tsv")
 
 resLFC_ABCvsGCB <- resLFC_GCBvsABC %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
 resLFC_ABCvsUnclass <- resLFC_UnclassvsABC %>% select(baseMean, log2FoldChange) %>% mutate(log2FoldChange = -log2FoldChange)
