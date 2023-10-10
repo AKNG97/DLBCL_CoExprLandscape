@@ -78,8 +78,7 @@ global_count <- data.frame(total_edges = ABC_count$total_edges,
                            ABC_count = ABC_count$cis_proportion,
                            GCB_count = GCB_count$cis_proportion,
                            Unclass_count = Unclass_count$cis_proportion)
-write.csv(global_count, file="global_cis_count_lymphomas_4.csv")
-
+write.csv(global_count, file="Results/global_cis_count_lymphomas.csv")
 
 ##### Count Gene types linked #####
 
@@ -134,10 +133,6 @@ Unclass_10k_EdgesTypes <- Unclass_10k_EdgesTypes %>% mutate(fraction = Freq/1000
 Global_Edges_Types <- rbind(Unclass_10k_EdgesTypes[1:5,],
                             GCB_10k_EdgesTypes[1:5,], ABC_10k_EdgesTypes[1:5,])
 
-saveRDS(Global_Edges_Types, "Global_Edges_Types_4.RDS")
-
-Global_Edges_Types <- readRDS("Global_Edges_Types_4.RDS")
-
 Global_Edges_Types[1:5,4] <- "ABC"
 Global_Edges_Types[6:10,4] <- "GCB"
 Global_Edges_Types[11:15,4] <- "Unclass"
@@ -154,6 +149,6 @@ biotypes_counts <- ggplot(Global_Edges_Types, aes(fill=Var1, x=V4, y=fraction)) 
         legend.text = element_text(size=12))
 
 
-ggsave(filename = "biotypes_counts_DLBCL_4.tiff", plot = biotypes_counts, units="in", 
+ggsave(filename = "Results/biotypes_counts_DLBCL.tiff", plot = biotypes_counts, units="in", 
        width=10, height=10,  dpi =300)
 
