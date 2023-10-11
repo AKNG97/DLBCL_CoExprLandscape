@@ -62,7 +62,7 @@ for(i in 1:nrow(ProgressExpressGenes)){
 
 write.csv(factors_global, "Results/SurvivalAnalysis_results/GroupsByMedianExpression.csv", quote = FALSE)
 
-#Get survival data from cliinical information
+#Get survival data from clinical information
 clinical_data <- readRDS("Results/clinical_info.RDS")
 clinical_data[is.na(clinical_data$days_to_last_follow_up), ]$days_to_last_follow_up <- 0
 
